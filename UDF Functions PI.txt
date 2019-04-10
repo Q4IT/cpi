@@ -1,0 +1,158 @@
+1. init:
+
+/**
+ * Method will be called before mapping
+ */
+public void init(GlobalContainer container) throws StreamTransformationException{
+
+2. cleanUp:
+
+/**
+ * Method will be called after mapping
+ */
+public void cleanUp(GlobalContainer container) throws StreamTransformationException{
+
+3. saveFactnr:
+
+Title: saveFactnr
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; input; String
+
+FACTNR = input;
+
+return "";
+
+4.clearValue:
+
+Title: clearValue
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; input; String
+
+return "";
+
+5. SetDynamicUrl
+
+Title: SetDynamicUrl
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; var1; String
+
+String serverUrl = "https://my315796.sapbydesign.com/sap/bc/srt/scs/sap/managepurchaseorderin";
+
+// Initialize use of dynamic configuration
+DynamicConfiguration conf = (DynamicConfiguration) container
+  .getTransformationParameters()
+  .get(StreamTransformationConstants.DYNAMIC_CONFIGURATION);
+
+//Set dynamic server URL
+DynamicConfigurationKey key1 = DynamicConfigurationKey.create("http://sap.com/xi/XI/System/SOAP", "TServerLocation");
+conf.put(key1,serverUrl);
+
+return "";
+
+6. getFactnr
+
+Title: getFactnr
+Execution Type: Single Values
+Category: User-Defined
+
+return FACTNR;
+
+7. splitValue
+
+Title: splitValue
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; object; String
+
+// Split 'object' separated by  a '|' in 2 fields
+String tmp = "";
+try{
+String [] temp = null;
+temp = object.split("\\|");
+tmp = temp[1];
+}catch(Exception e)
+{
+return "";
+}
+return tmp;
+
+8. replaceEmptyValue
+
+Title: replaceEmptyValue
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; input; String
+
+if (input.equals("")) {
+
+return "0";
+} else {
+
+return input;
+
+}
+
+
+9. CheckWeekYear
+
+Title: CheckWeekYear
+Description: CheckWeekYear
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; YearWeek; String
+Signature Variables: Argument; Date; String
+
+
+String year =  YearWeek.substring(0, 4);
+String week = YearWeek.substring(5, 7);
+String month = Date.substring(3, 5);
+String yearofDate = Date.substring(6, 10);
+
+if((week.compareTo("01") == 0) && (month.compareTo("12") == 0) && (year.compareTo(yearofDate) == 0)) {
+
+		int yearInt = Integer.parseInt(year);
+	  yearInt++;
+      String yearString = Integer.toString(yearInt);
+    	YearWeek = yearString + '-' + week;
+	return YearWeek; 
+
+} 
+else if(((week.compareTo("52") == 0) || (week.compareTo("53") == 0)) && (month.compareTo("01") == 0) && (year.compareTo(yearofDate) == 0)) {
+
+		int yearInt = Integer.parseInt(year);
+	  yearInt--;
+      String yearString = Integer.toString(yearInt);
+    	YearWeek = yearString + '-' + week;
+return YearWeek;
+
+}
+else{
+return YearWeek;
+}
+
+
+10. dynamicSubstring
+
+Title: CheckWeekYear
+Description: CheckWeekYear
+Execution Type: Single Values
+Category: User-Defined
+Signature Variables: Argument; inputString; String
+Signature Variables: Argument; start; int
+
+String outputString = "";
+int stringLength = inputString.length();
+int end = 0;
+end = stringLength;
+
+ try {
+    outputString = inputString.substring(start + 1, end);
+}
+
+catch(NumberFormatException e) { }
+
+return outputString;
+
